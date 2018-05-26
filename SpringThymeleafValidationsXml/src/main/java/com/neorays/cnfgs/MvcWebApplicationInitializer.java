@@ -1,4 +1,4 @@
-package com.neorays.cnfgs;
+/*package com.neorays.cnfgs;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class MvcWebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -18,4 +18,4 @@ public class MvcWebApplicationInitializer extends AbstractAnnotationConfigDispat
       return new String[] { "*.htm" };
    }
 
-}
+}*/

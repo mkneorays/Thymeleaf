@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="#{Lable.title}">Title</title>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+<body>
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-9 col-9">
+				<h1 th:text="#{welcome.msg}">SpringMVC with Thymeleaf Validation</h1>
+                <form method="get" class="form-horizontal" action="form.htm" th:object="${customer}">
+				<h3 th:text="#{Form.heading}">Form Heading</h3>
+				
+				<div th:class="${#fields.hasErrors('id')}">
+				
+				<label th:text="#{Label.id}" class="col-sm-2 control-label"></label>
+				<div class="col-sm-10">
+						<input type="text" th:field="*{id}"  class="form-control" />
+						<p th:errors="*{id}"></p>
+						</div>
+						</div>
+						
+				<div th:class="${#fields.hasErrors('firstname')} ? 'form-group has-error' :'form-group' ">
+				 <label th:text="#{Label.firstName}" class="col-sm-2 control-label"></label>
+				<div class="col-sm-10">
+						<input type="text" th:field="*{firstname}"  class="form-control" />
+						<p th:errors="*{firstname}" class="help-block"></p>
+						</div>
+						</div>
+						<div th:class="${#fields.hasErrors('lastname')} ? 'form-group has-error' :'form-group' ">
+				<label th:text="#{Label.lastName}" class="col-sm-2 control-label"></label>
+				<div class="col-sm-10">
+						<input type="text"  th:field="*{lastname}" class="form-control" />
+						<p th:errors="*{lastname}" class="help-block"></p>
+						</div>
+				</div>
+				<br/>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" th:inline="text" class="btn btn-primary">[[#{Label.save}]]</button>
+					</div>
+				</div>
+                </form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
