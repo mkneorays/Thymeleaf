@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title th:text="#{Lable.title}">I18N</title>
+
+<body>
+	Language :
+	<a href="?lang=es">TELGU</a> |
+	<a href="?lang=hi">HINDI</a> |
+	<a href="?lang=en">ENGLISH</a><br>
+	
+	
+	
+	<h1>Spring MVC + Thymeleaf Hello World example</h1>
+	<h1 th:text="#{welcome.msg}">Thymeleaf</h1>
+	<form action="#" th:action="@{form.htm}" th:object="${person}">
+	<h3 th:text="#{Form.heading}">Form Heading</h3>
+	<div>
+	      <div th:class="${#fields.hasErrors('p_id')}">
+		<label th:text="#{Label.id}" class="col-sm-2 control-label"></label>
+		<input type="text" th:field="*{p_id}"  class="form-control" />
+		<p th:errors="*{p_id}"></p>
+		 </br> </br>
+		</div>
+		  <div th:class="${#fields.hasErrors('fname')}">
+		<label th:text="#{Label.firstName}" class="col-sm-2 control-label"></label>
+		<input type="text" th:field="*{fname}"  class="form-control" /> </br> </br>
+		<p th:errors="*{fname}"></p>
+		 </br> </br>
+		</div>
+		 <div th:class="${#fields.hasErrors('lname')}">
+		<label th:text="#{Label.lastName}" class="col-sm-2 control-label"></label>
+		<input type="text"  th:field="*{lname}" class="form-control" /> <br/> </br>
+		<p th:errors="*{lname}"></p>
+		 </br> </br>
+		</div>
+		<button type="submit" th:inline="text" class="btn btn-primary">[[#{Label.save}]]</button>
+		
+	</div>
+	</form>
+	
+
+</body>
+</html>
