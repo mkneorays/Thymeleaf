@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<!--$Id: EmpAEPensionDetails.html,v 1.20 2015/07/18 12:24:13 vinayak Exp $-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- start: HEAD -->
+  <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Edit Pension</title>
+	
+	<link th:href="@{/resources/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" />
+		<link th:href="@{/resources/css/icheck.css}" rel="stylesheet" />
+        <link th:href="@{/resources/css/faqtoid.css}" rel="stylesheet" />
+  </head>
+ 
+  <body>
+    
+	<div class="container" th:fragment="content">
+		
+		<div class="container">
+			<ol class="breadcrumb">
+				<li><a th:href="@{/qpc/aps/list}">Home</a></li>
+				<li class="active">Edit AE Pension Details</li>
+			</ol>
+			<div class="row">
+				<div class="col-sm-8 col-sm-offset-2">
+					<fieldset>
+					
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class="pull-right">
+									<a class="btn btn-default" th:href="@{/qpc/aps/list}">Back</a>							
+								</div>							
+							<h4>Edit A E Pension Details <a href="javascript:void();" class="showFaqtoid"><i class="fa fa-question-circle"></i></a></h4>
+							</div>
+							<div class="table-responsive">
+								<table th:object="${empBean}" class="table alert alert-warning">
+									<tr>
+										<td class="text-right">Works No.</td>
+										<td><strong th:text="*{eeWksNo}"></strong></td>
+										<td class="text-right">Employee Name</td>
+										<td><strong th:text="*{eeName}"></strong></td>
+										<!-- <td><strong th:text="*{eeSurname + ', ' + eeFname}"></strong></td> -->
+										<td class="text-right">NINo</td>
+										<td><strong th:text="*{eeNiNumber}"></strong></td>
+									</tr>
+								</table>
+							</div>
+							<form  id="myForm" th:object="${empPen}" method="POST" class="form-horizontal"  th:action="@{/qpc/aps/qpc/ae-pension/assign}" > 
+							
+							<div class="panel-body">					
+													
+									<h4>A. Auto Enrolment (AE) Start Date</h4>
+									<hr />
+									
+									<div class="col-sm-10 col-sm-offset-1 text-justify">
+									<div th:class="${#fields.hasErrors('aeStartDate')} ? 'form-group has-error' :'form-group' ">
+										<div class="form-group">
+											<div class="col-sm-11">
+												<input type="radio" value="AE Staging Date"  th:field="*{aeStartDate}"  class="iRadio" 
+													/>
+												<label for="proUserNoticeDateType1"></label> As per the AE Staging Date
+											</div>
+											<div class="col-sm-1 form-control-static">
+												<a href="#" class="help-button" id="qtn4E1" title="Title">?</a>
+											</div>
+										</div>										
+										<div class="form-group">
+											<div class="col-sm-11">
+												<input type="radio"th:field="*{aeStartDate}" class="iRadio" value="Company Deferment Policy"
+													 />
+												<label for="proUserNoticeDateType4"></label> As per the Company Deferment Policy
+											</div>
+											<div class="col-sm-1 form-control-static">
+												<a href="#" class="help-button" id="qtn4E2" title="Title">?</a>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-11">
+												<input type="radio" th:field="*{aeStartDate}" value="Individual  Deferment Policy" class="iRadio" 
+												id="aeStartDate" />
+													<label for="proUserNoticeDateType"></label> As per the Individual Employee Deferment Policy
+											</div>
+											<div class="col-sm-1 form-control-static">
+												<a href="#" class="help-button" id="qtn4E3" title="Title">?</a>
+											</div>
+										</div>
+										<p th:errors="*{aeStartDate}" class="help-block"></p>
+								    </div>
+									</div>
+									
+									<div class="clearfix"></div>
+									
+									<div class="showAll hideAll">
+										<h4>B. Employee AE Pension Details</h4>
+										<hr />										
+										<div class="form-group">
+											<div th:class="${#fields.hasErrors('schemeName')} ? 'form-group has-error' :'form-group' ">
+											<label class="col-sm-6 control-label">Scheme Name</label>
+											<div class="col-sm-4"> 
+											 	 	<select th:field="*{schemeName}" name="psID" id="schemeName"
+														class="form-control" >
+													<option  value="" selected="selected">Select</option>
+													<option  th:each="var : ${listScheam}" th:text="${var.label}"
+													  th:value="${var.label}"/>
+													</select>
+											   		<div><p th:errors="*{schemeName}"  class="help-block"></p></div>
+										 	</div>
+										
+											</div>
+										</div>
+										
+										<div class="clearfix"></div>
+										<h4>C. AE Refund Opt-out Request</h4>
+											<hr />
+											
+											<div class="form-group">
+											
+												<label class="col-sm-6 control-label">Refund Opt Out Start Date</label> 
+										
+												<div>
+													<div class="col-sm-4">
+															<div class="input-group date" id="dp1">
+															<span  class="form-control-static">28/09/2014
+																</span>
+															</div>
+													</div>
+												</div>
+												<div class="col-sm-2 form-control-static">
+													<a href="#" class="help-button" id="qtn410" title="Title">?</a>
+												</div>
+											</div>
+												
+												<br/>
+												
+												<div class="form-group">
+													<label class="col-sm-6 control-label">Refund Opt Out End Date</label>
+														<div>
+															<div class="col-sm-4">
+																	<div class="input-group date" id="dp1">
+																		<span class="form-control-static">27/10/2014
+																		</span>
+																 	 </div>
+															</div>
+														</div>
+														<div class="col-sm-2 form-control-static">
+															<a href="#" class="help-button" id="qtn410" title="Title">?</a>
+														</div>
+												</div>
+											
+											
+												<div class="form-group">
+												<label class="col-sm-6 control-label">Do you want to extend the Refund Opt Out End Date to?</label>
+														
+														<div class="col-sm-4"> 
+														<div >
+														      <select th:field="*{refundOptOut}" class="form-control">
+			                                                  <option value="true" selected="">No</option>
+			                                                 <option value="false">Yes</option>
+			                                          	 		</select>
+													 	</div>
+													 		</div>
+													 	<span class="help-block"></span>
+                                                         
+												<div class="col-sm-2 form-control-static">
+													<a href="#" class="help-button" id="qtn410" title="Title">?</a>
+												</div>
+												</div>
+						                
+											<div class="form-group">
+												
+												<label class="col-sm-6 control-label">Refund Opt-out
+													Accepted Date</label>
+												<div class="col-sm-4">
+												
+													<div class="input-group date" id='date1'>
+														<input class="form-control" size="16" id="refundOptOutDate"
+															th:field="*{refundOptOutDate}"
+															 placeholder="dd/MM/yyyy"/>
+													<span class="input-group-addon"><span><i
+																class="fa fa-calendar-o"></i></span> </span>
+													</div>
+												<span class="help-block"></span>
+												</div>
+												<div class="col-sm-2 form-control-static">
+													<a href="#" class="help-button" id="qtn410" title="Title">?</a>
+												</div>
+									      </div>
+	                                         
+											<br />
+												
+											 <div class="clearfix"></div>
+				     						<h4>D. AE Opt-In Request</h4>
+											<hr />
+											
+											<div class="form-group">
+											
+													<label class="col-sm-6 control-label">Opt-In Request Date</label>
+													<div class="col-sm-4" >
+														<div class="input-group date" id="dp3">
+															<input class="form-control"  id="optInRequestDate" size="16" 
+															 placeholder="dd/MM/yyyy" th:field="*{optInRequestDate}"/>
+																
+															 <span 
+																class="input-group-addon"><a><i class="fa fa-calendar-o"></i></a>
+															</span>
+														</div>
+												         
+													
+													</div>
+													<div class="col-sm-2 form-control-static">
+														<a href="#" class="help-button" id="qtn410" title="Title">?</a>
+													</div>
+												
+	                                        </div>
+	                                          
+											<div class="form-group">
+											
+												<label class="col-sm-6 control-label">Effective
+													Opt-In Date</label>
+
+												<div>
+													<div class="col-sm-4">
+														<div class="input-group date" id="dp4">
+															<input class="form-control" id="optInEffectiveDate"
+																th:field="*{optInEffectiveDate}" size="16"
+																data-date-format="DD/MM/YYYY" placeholder="dd/MM/yyyy" />
+
+															<span class="input-group-addon"><a><i
+																	class="fa fa-calendar-o"></i></a> </span>
+														</div>
+											
+														<span class="help-block"></span> <span class="help-block"></span>
+													</div>
+												</div>
+
+													<div class="col-sm-2 form-control-static">
+														<a href="#" class="help-button" id="qtn410" title="Title">?</a>
+													</div>
+											
+											</div>
+											<hr />
+											
+												<br/>
+											
+												<h4>E. AE Cease Membership Request</h4>
+												<hr/>
+
+											<div class="form-group">
+								
+														<label class="col-sm-6 control-label">Cease Membership Request Date</label>
+
+														<div>
+															<div class="col-sm-4">
+																<div class="input-group date" id="dp5">
+																	<input th:field="*{cmRequestDate}" id="cmRequestDate" class="form-control"  
+																	size="16" data-date-format="DD/MM/YYYY"  placeholder="dd/MM/yyyy"/> 
+																	
+																	<span 
+																		class="input-group-addon"><a><i class="fa fa-calendar-o"></i></a></span>
+																</div>
+																
+																<span class="help-block"></span> <span class="help-block"></span>
+															</div>
+														</div>
+
+													<div class="col-sm-2 form-control-static">
+														<a href="#" class="help-button" id="qtn410" title="Title">?</a>
+													</div>
+												
+											</div>
+											
+											<div class="form-group">
+												
+													<label class="col-sm-6 control-label">Effective Cease Membership Date</label>
+													
+													<div class="col-sm-4" >
+														<div class="input-group date" id="dp6">
+															<input th:field="*{cmEffectiveDate}" id="cmEffectiveDate" class="form-control"  size="16" data-date-format="DD/MM/YYYY"  placeholder="dd/MM/yyyy"/> 
+															
+															<span 
+																class="input-group-addon"><a><i class="fa fa-calendar-o"></i></a>
+															</span>
+														</div>
+													
+													</div>
+													<div class="col-sm-2 form-control-static">
+														<a href="#" class="help-button" id="qtn410" title="Title">?</a>
+													</div>
+											
+										
+											</div>
+													
+									</div>
+									
+
+										<div class="panel-footer">
+											<div class="pull-right">
+												<a class="btn btn-default" th:href="@{/qpc/aps/list}">Back</a>
+												<input  value="Save" class="btn btn-primary" type="button" onclick="validate()"/>
+											</div>
+											<div class="clearfix"></div>
+										</div>
+													</div>
+							</form>							
+						</div>
+							
+						</fieldset>
+					</div>																				
+			</div>					
+					</div>
+
+							<script th:inline="javascript" type="text/javascript">
+								$(function () {
+								$('#dp100,#dp200').datetimepicker({
+								pickTime: false
+								});
+								});
+								</script>
+		<script th:inline="javascript" type="text/javascript">
+					
+					function validate() {
+						alert("qqq");
+						$.ajax({
+						type : "POST",   
+						        url : "https://localhost:9443/portal/qpc/aps/validate-client",
+						        data : $('#myForm').serialize(),
+						        success : function(res) {
+						       	console.log(res);
+						$( '.text-danger').remove();	       	 
+						       	if(res.validated){
+						        $('#myForm').unbind('submit');
+						       	$('#myForm').submit(); 
+						} else {
+						if(res.resCode == -1) {
+						window.location.href = [[@{'/home'}]];
+						} else {
+						$.each(res.result, function(index, element){
+						$('#'+element.field).after('<div><span class="text-danger">'+element.defaultMessage+'</span></div>');
+						  });
+						}
+						}
+						}
+						}, 'json');
+
+						}
+	          
+				</script>
+			<script th:src="@{/resources/js/jquery.2.0.3.min.js}"></script>
+			<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+				<script th:src="@{/resources/js/main.js}"></script>
+			<script th:src="@{/resources/js/icheck.min.js}"></script>
+				
+			<script th:src="@{/resources/js/dynamicFormFields.js}"></script>
+			<script th:src="@{/resources/js/moment.js}"></script>
+			<script th:src="@{/resources/js/bootstrap-datetimepicker.min.js}"></script>
+			
+			<script th:src="@{/resources/js/jquery.qtip.min.js}"></script>
+			<div th:replace="quicklinks/employeeql :: employeeql">quicklinks</div>
+			<script th:src="@{/resources/js/bc-quicklink.js}"></script>
+		
+			<!--<script th:src="@{/resources/js/RoboHelp_CSH.js}"></script>-->
+	            <script id="faqtoidScript" th:src="@{/resources/js/faqtoid.js}" data-videos="CUdf25gJ6ws,ytc_c2KqbxM,tFOcRyeGxOc" th:attr="data-faqs=@{/resources/help/edit_pension.txt}"></script>
+				<script th:src="@{/resources/js/jquery.dragme.min.js}"></script>
+		</div>			
+	</body>
+	</html>
