@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<!--$Id: EmpWppPenIndividalAssign.html,v 1.24 2017/01/12 18:04:53 louis Exp $-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title></title>
+</head>
+<body>
+	<div class="container" th:fragment="content">
+		<link th:href="@{/resources/css/dataTables.bootstrap.css}"
+			rel="stylesheet" />
+		<link th:href="@{/resources/css/dataTables-custom.css}"
+			rel="stylesheet" />
+		<link th:href="@{/resources/css/dataTables.customLoader.css}"
+			rel="stylesheet" />
+		<link th:href="@{/resources/css/faqtoid.css}" rel="stylesheet" />
+		<style media="all" type="text/css">
+/* Bootstrap Container fix - Width Changed to percentage to cater to all resolutions */
+@media ( min-width : 1200px) {
+	.container {
+		width: 98%;
+	}
+}
+
+.wsnowrap {
+	white-space: nowrap;
+}
+</style>
+		<div class="container">
+			<div class="row">
+				<ol class="breadcrumb">
+					<li><a href="#">Home</a></li>
+					<li class="active">Assign Pension Scheme (Individual)</li>
+				</ol>
+				<div class="col-sm-12">
+						<div class="panel panel-default">
+						<form method="get" action="/portal/qpc/aps/qpc/ae-pension">
+						<input type="hidden" name="eeWkno"/>
+						<input type="hidden"  name="name"/>
+						<input type="hidden"  name="schema"/>
+							<div class="panel-heading">
+								<div class="pull-right">
+									<a class="btn btn-danger" href="#">Back</a> <span
+										id="condButTop"> 
+                                           <input class="btn btn-success" type="submit" value="Assign Scheme">   
+									</span>
+								</div>
+								<h4>
+									Assign Pension Scheme (Individual) <a href="javascript:void();"
+										class="showFaqtoid"><i class="fa fa-question-circle"></i></a>
+								</h4>
+							</div>
+							
+							 <p th:text="${session.schemeList1}" th:unless="${session == null}">[...]</p>
+						<!-- 	<p th:text="${session.schemeList.scheme1}" th:unless="${session == null}">[...]</p> -->
+							
+							<div class="panel-body">
+								<div class="table-responsive">
+								
+									<table class="table table-hover table-full-width"
+										id="empwpppenindividalassign">
+										<thead>
+											<tr>
+												<th class="text-center">Works <br /> No.</th>
+												<th>Employee Name</th>
+												<th>Scheme Name</th>
+												<th>Payment Source</th>
+												<th class="text-center">Scheme Detail</th>
+											</tr>
+							      	</thead>
+
+										<tbody id="userslist">
+										
+											<tr  th:each="EmprBean,itr : ${listDate}">
+								
+												<td  th:text="${EmprBean.eeWksNo}"></td> 
+												<input th:id="eeWksNo+${itr.count}" type="hidden" th:name="empwork+${itr.count}" th:value="${EmprBean.eeWksNo}"  />
+												<td   th:text="${EmprBean.eeSurname +', '+EmprBean.eeFname}"></td>
+												<input th:id="eeSurname+${itr.count}" type="hidden" th:name="empname+${itr.count}" th:value="${EmprBean.eeSurname +', '+EmprBean.eeFname}" />
+										         
+										          <td   class="text-center">
+											<select th:id="www+${itr.count}" class="form-control text-center"  
+											th:name="scheme+${itr.count}"  onchange="changeSchema(this.value)">
+												         <option  value="">Select Pension Scheme</option>												       
+														<option  th:each="entry: ${EmprBean.schemeList}"
+															th:value="${entry.label}" 
+												            th:selected="${entry.label.equals(schemeList123__${itr.count}__)}"
+												             th:text="${entry.label}" />
+												            <!--  th:selected="${entry.label.equals(schemeList1233)}" 
+												             th:selected="${'entry.label.equals(schemeList123'+'${itr.count})'}"
+												             th:selected="${entry.label.equals(schemeList123+'${itr.count}')}"
+												             th:text="${entry.label.equals(schemeList123__${var.count}__)}"
+												              th:selected="${entry.label.equals(schemeList123__${var.count}__)}"
+												              _${itr.count}__==its increse by 1 based on outer loop haaaaa
+												              -->
+												             <!--  <strong th:text="${entry.label.equals(schemeList123+'${itr.count}')}"></strong> -->
+												</select>
+												</td>
+												
+												<td   class="text-center">
+												<select class="form-control text-center" th:name="source+${itr.count}">
+												      <option value="">Select Payment Source</option>									    
+														<option th:each="entry : ${EmprBean.bankList}"
+															th:value="${entry.erBankRef}" th:text="${entry.erBankRef}">
+														</option>
+												</select></td>
+                                                  <!-- <td class="text-center"><a th:href="@{'/qpc/edit/pension/'+${EmprBean.eeWksNo}+'/aaa/'+${EmprBean.eeSurname}+'/bbb/'+${EmprBean.eeFname}}" class="setURL">View / Edit</a></td> -->
+											          <td class="text-center"><a th:onclick="'javascript:viewEdit(\''+ *{EmprBean.eeWksNo} +'\',\''+ ${EmprBean.eeSurname} +'\',\''+ ${EmprBean.eeFname} +'\')'" > View / Edit</a></td>
+											</tr>
+										    <strong th:text="${schemeList1234}"></strong>
+										
+										
+										</tbody>
+
+									</table>
+										
+										                        
+					                 </div>
+				                  </div>  
+								<!-- start: panel-footer -->
+									<div class="panel-footer">
+										<div class="pull-right">
+											<a class="btn btn-danger" href="#">Back</a>
+											<span id="condButBot">
+											<input class="btn btn-success" type="submit" value="Assign Scheme">
+											</span>	
+										</div>
+										<div class="clearfix"></div>
+									</div>
+									<p id="demo"></p>
+									</form>		
+								</div>
+						</div>
+					</div>
+				</div>
+                <div id="js-draggable" class="circle">
+                <h1 class="headline"> <a href="javascript:void();"
+					class="showFaqtoid link">HELP<br />
+                    <i class="fa fa-question fa-3x"></i><br />
+                    DEMO</a> </h1>
+            </div>
+						    
+             <script type="text/javascript">
+             	var gschema="";
+            	function viewEdit(eeWksNo,name,surname) {
+			  var eename=name+","+surname;
+				frm = document.forms[0];
+				frm.eeWkno.value = eeWksNo;
+				frm.name.value = name+","+surname;
+				frm.schema.value=gschema;
+				frm.action = "/portal/qpc/edit/pension1";
+				frm.submit();
+			}
+			
+            function changeSchema(schema){       	
+            	gschema=schema;
+  			return schema;
+			}
+	      </script>
+            
+			<script th:src="@{/resources/js/jquery.2.0.3.min.js}"></script>
+			<script th:src="@{/resources/js/bootstrap.min.js}"></script>
+			<script th:src="@{/resources/js/main.js}"></script>
+			
+            <script th:src="@{/resources/js/common.js}"></script>
+			<script th:src="@{/resources/js/jquery.dataTables.min.js}"></script>
+			<script th:src="@{/resources/js/dataTables.bootstrap.js}"></script>
+			<script th:src="@{/resources/js/utils.js}"></script>
+			<script th:src="@{/resources/js/common.js}"></script>
+			
+    		<!--<script th:src="@{/resources/js/RoboHelp_CSH.js}"></script>-->
+            <script id="faqtoidScript"
+			th:src="@{/resources/js/faqtoid.js}"
+			data-videos="46u8OrQ2WcU,CUdf25gJ6ws,EQbSrWmpq6U"
+			th:attr="data-faqs=@{/resources/help/group_assigning.txt}"></script>
+			<script th:src="@{/resources/js/jquery.dragme.min.js}"></script>
+			
+			
+			<!-- <script>
+				/*FAQTOID DARAGGABLE */
+				$(document).ready(function() {
+					$('#js-draggable').dragMe();
+				});
+			</script> -->
+			 
+		</div>
+	</body>
+</html>
+
