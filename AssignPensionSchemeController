@@ -1,0 +1,262 @@
+package com.iss.aex.aps.web;
+
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.iss.thlayouts.Layout;
+import com.iss.aex.aps.beans.Employee;
+import com.iss.aex.aps.beans.EmployeeDetails;
+import com.iss.aex.aps.beans.EmployeePension;
+import com.iss.common.signup.domain.ValidationResponse;
+import com.iss.common.utils.LabelValueBean;
+import com.iss.payroll.employee.domain.EmpWppGroupAssignBean;
+import com.iss.payroll.employer.domain.EmprBankBean;
+
+@Layout(value = "layouts/startup")
+@Controller
+public class AssignPensionSchemeController {
+
+	private static final Logger logger = LoggerFactory.getLogger(AssignPensionSchemeController.class);
+
+	/*
+	 * @InitBinder public void myInitBinder(WebDataBinder binder) {
+	 * SimpleDateFormat sdf = null; sdf = new SimpleDateFormat("dd/MM/yyyy");
+	 * binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
+	 * }
+	 */
+
+	@RequestMapping(value = "/qpc/aps/list")
+	public String assignPensionSchemeMethod(Map<String, Object> map,HttpServletRequest req) {
+		logger.debug("Entered assignPensionSchemeMethod method...");
+		//HttpSession ses=req.getSession(true);
+		  
+		List<EmpWppGroupAssignBean> list = null;
+		list = fetchAssignPensionScheme();
+		// ses.setAttribute("listDate", list);
+		System.out.println("first controller method" + list);
+		// set data into model
+		map.put("listDate", list);
+		return "/qpc/aps/AssignPensionSchemeList1";
+	}
+
+	@RequestMapping(value = "/qpc/aps/qpc/ae-pension", method = RequestMethod.GET)
+	public String assignPensionSchemePage(Map<String, Object> map,@ModelAttribute EmployeeDetails empDetails,HttpServletRequest req) {
+		logger.debug("Entered assignPensionSchemePage method..." + empDetails);
+		//get session
+		HttpSession ses=req.getSession(true);
+		  ses.setAttribute("backData", empDetails);
+		// call to service layer and store data
+		System.out.println("third controller method" + empDetails);
+		//map.put("schemeList", empDetails);
+		return "/qpc/aps/PenAssignEmpMesg";
+	}
+
+	@RequestMapping(value = "/qpc/aps/list/back" , method = RequestMethod.GET) 
+	public String assignPensionSchemePageBack(Map<String, Object> map,HttpSession ses){
+		EmployeeDetails empDetails=(EmployeeDetails) ses.getAttribute("backData");
+	  System.out.println("back button controller method"); // 
+	  
+	  List<EmpWppGroupAssignBean> list = null;
+	list = fetchAssignPensionScheme();
+		map.put("schemeList1231",empDetails.getScheme1() );
+		map.put("schemeList1232", empDetails.getScheme2());
+		map.put("schemeList1233", empDetails.getScheme3());
+		map.put("schemeList1234", empDetails.getScheme4());
+		map.put("schemeList1235", empDetails.getScheme5());
+		map.put("listDate", list);
+	   return "/qpc/aps/AssignPensionSchemeList1"; 
+	   }
+
+	/*
+	 * @RequestMapping(value = "/qpc/edit/pension" , method = RequestMethod.GET)
+	 * public String editAssignPensionPage(Employee emp, Map<String, Object>
+	 * map,@RequestParam("dept") String eeWksNo,
+	 * 
+	 * @RequestParam("state") String eeName, @RequestParam("scheme") String
+	 * schemeName,@ModelAttribute("empPen") EmployeePension empPen) {
+	 * logger.debug("Entered editAssignPensionPage method...");
+	 * System.out.println("third controller method"+eeWksNo+" "+eeName+" "
+	 * +schemeName); emp.setEeWksNo(eeWksNo); emp.setEeName(eeName);
+	 * emp.setEeScheme(schemeName); //set emp nino no
+	 * emp.setEeNiNumber(empNino());
+	 * System.out.println("third controller method"+emp); // set model data in
+	 * map map.put("empBean", emp); map.put("listScheam", addLabelValueBean());
+	 * return "/qpc/aps/EditAssignPension1"; }
+	 */
+	@RequestMapping(value = "/qpc/edit/pension1", method = RequestMethod.GET)
+	public String editAssignPensionPage(Map<String, Object> map, @RequestParam("name") String name,
+			@RequestParam("eeWkno") String eeWkno, @RequestParam("schema") String schema, Employee emp,
+			@ModelAttribute("empPen") EmployeePension empPen) {
+		logger.debug("Entered editAssignPensionPage method...");
+		System.out.println(" @RequestParam value" + eeWkno + " " + name + " " + schema);
+		
+		emp.setEeWksNo(eeWkno);
+		emp.setEeName(name);
+		emp.setEeScheme(schema);
+		map.put("lastselected", schema);
+		// set emp nino no
+		emp.setEeNiNumber(empNino());
+		System.out.println("second controller method" + emp);
+		// set model data in map
+		map.put("empBean", emp);
+		map.put("listScheam", addLabelValueBean());
+		return "/qpc/aps/EditAssignPension1";
+	}
+
+	/*
+	 * @RequestMapping(value = "/qpc/edit/pension" , method = RequestMethod.GET)
+	 * public String editAssignPensionPage(Employee emp, Map<String, Object>
+	 * map, @PathVariable String eeWksNo,
+	 * 
+	 * @ModelAttribute("empPen") EmployeePension empPen, @PathVariable String
+	 * eeName, @PathVariable String schemeName) {
+	 * logger.debug("Entered editAssignPensionPage method...");
+	 * System.out.println("third controller method"+empPen);
+	 * emp.setEeWksNo(eeWksNo); emp.setEeName(eeName);
+	 * emp.setEeScheme(schemeName); //set emp nino no
+	 * emp.setEeNiNumber(empNino());
+	 * System.out.println("third controller method"+emp); // set model data in
+	 * map map.put("empBean", emp); map.put("listScheam", addLabelValueBean());
+	 * return "/qpc/aps/EditAssignPension1"; }
+	 */
+
+	@RequestMapping(value = "/qpc/aps/validate-client", method = RequestMethod.POST)
+	@ResponseBody
+	public ValidationResponse validateClient(@ModelAttribute("empPen") @Valid EmployeePension empPen,
+			BindingResult result) {
+		logger.debug("Entered Validate Client" + empPen);
+		System.out.println("fourth controller method" + empPen);
+		ValidationResponse response = new ValidationResponse();
+		if (result.hasErrors()) {
+			System.out.println("fourth controller method error method");
+			response.setValidated(false);
+			response.setResult(result.getFieldErrors());
+		} else {
+			System.out.println("fourth controller method success method");
+			response.setValidated(true);
+		}
+		return response;
+	}
+
+	@RequestMapping(value = "/qpc/aps/qpc/ae-pension/assign", method = RequestMethod.GET)
+	public String assignPensionSchemePage(@ModelAttribute("empPen") EmployeePension empPen) {
+		System.out.println(" last controller emp empDetails" + empPen);
+		// call to service layer and store data
+
+		logger.debug("Entered assignPensionSchemePage method...");
+		return "/qpc/aps/PenAssignEmpMesg";
+	}
+
+	private static List<EmpWppGroupAssignBean> fetchAssignPensionScheme() {
+		List<EmpWppGroupAssignBean> list = new ArrayList<EmpWppGroupAssignBean>();
+		EmpWppGroupAssignBean bean1 = new EmpWppGroupAssignBean();
+		bean1.setEeSurname("Williams");
+		bean1.setEeFname("Jack");
+		bean1.setEeWksNo("ABC123");
+		bean1.setEeID(1239);
+		bean1.setSchemeList(addLabelValueBean());
+		bean1.setBankList(addBank());
+		EmpWppGroupAssignBean bean2 = new EmpWppGroupAssignBean();
+		bean2.setEeSurname("Redford");
+		bean2.setEeFname("Robert");
+		bean2.setEeWksNo("ABC124");
+		bean2.setEeID(1238);
+		bean2.setSchemeList(addLabelValueBean());
+		bean2.setBankList(addBank());
+		EmpWppGroupAssignBean bean3 = new EmpWppGroupAssignBean();
+		bean3.setEeSurname("Hawn");
+		bean3.setEeFname("Goldie");
+		bean3.setEeWksNo("ABC125");
+		bean3.setEeID(1237);
+		bean3.setSchemeList(addLabelValueBean());
+		bean3.setBankList(addBank());
+		EmpWppGroupAssignBean bean4 = new EmpWppGroupAssignBean();
+		bean4.setEeSurname("Douglas");
+		bean4.setEeFname("Kirk");
+		bean4.setEeWksNo("ABC126");
+		bean4.setEeID(1236);
+		bean4.setSchemeList(addLabelValueBean());
+		bean4.setBankList(addBank());
+		EmpWppGroupAssignBean bean5 = new EmpWppGroupAssignBean();
+		bean5.setEeSurname("Roberts");
+		bean5.setEeFname("Julia");
+		bean5.setEeWksNo("ABC127");
+		bean5.setEeID(1235);
+		bean5.setSchemeList(addLabelValueBean());
+		bean5.setBankList(addBank());
+		list.add(bean1);
+		list.add(bean2);
+		list.add(bean3);
+		list.add(bean4);
+		list.add(bean5);
+		return list;
+	}// fetchAssignPensionScheme method
+
+	private static List<LabelValueBean> addLabelValueBean() {
+		List<LabelValueBean> lavel = new ArrayList<LabelValueBean>();
+		LabelValueBean lvb1 = new LabelValueBean();
+		lvb1.setLabel("GenLife - Scheme 1");
+		LabelValueBean lvb2 = new LabelValueBean();
+		lvb2.setLabel("GenLife - Scheme 2");
+		LabelValueBean lvb3 = new LabelValueBean();
+		lvb3.setLabel("Nest - Scheme 1");
+		LabelValueBean lvb4 = new LabelValueBean();
+		lvb4.setLabel("Nest - Scheme 2");
+		LabelValueBean lvb5 = new LabelValueBean();
+		lvb5.setLabel("Agon - Scheme 1");
+		lavel.add(lvb1);
+		lavel.add(lvb2);
+		lavel.add(lvb3);
+		lavel.add(lvb4);
+		lavel.add(lvb5);
+		return lavel;
+	}
+
+	private static List<EmprBankBean> addBank() {
+		List<EmprBankBean> bankList = new ArrayList<EmprBankBean>();
+		EmprBankBean ebb1 = new EmprBankBean();
+		ebb1.setErBankID(999);
+		ebb1.setErBankRef("Bank account 1");
+		EmprBankBean ebb2 = new EmprBankBean();
+		ebb2.setErBankID(888);
+		ebb2.setErBankRef("Bank account 2");
+		EmprBankBean ebb3 = new EmprBankBean();
+		ebb3.setErBankID(777);
+		ebb3.setErBankRef("Bank account 3");
+		EmprBankBean ebb4 = new EmprBankBean();
+		ebb4.setErBankID(666);
+		ebb4.setErBankRef("Bank account 4");
+		bankList.add(ebb1);
+		bankList.add(ebb2);
+		bankList.add(ebb3);
+		bankList.add(ebb4);
+		return bankList;
+	}
+
+	private static String empNino() {
+		Random r = new Random();
+		System.out.println("emp nino no=" + "NINO" + r.nextInt(1000));
+		return "NINO" + r.nextInt(1000);
+	}
+}
